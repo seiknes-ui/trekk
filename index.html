@@ -1,3 +1,9 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F2B200">
 <title>Trekkort yrkessjåfør</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,7 +64,11 @@
   --c1: #6FA8E8; --c2: #F0605A; --lamp-red: #FF5A4E; --lamp-amber: #FFB52E;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+:root { padding-top: env(safe-area-inset-top, 0px); }
 body {
+  margin: 0; -webkit-tap-highlight-color: transparent;
   background: var(--bg); color: var(--ink);
   font-family: var(--f-body); font-size: 16px; line-height: 1.5;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
@@ -298,6 +308,65 @@ footer { color: var(--muted); font-size: .85rem; }
 .simopts select { font: inherit; padding: 4px 8px; border-radius: 6px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); }
 .simmsg { margin: 0; min-height: 1.5em; font-weight: 600; }
 
+/* Trykkflater */
+.btn-fasit { min-height: 36px; padding: 6px 16px; }
+.mini { min-height: 36px; min-width: 42px; }
+.part { padding: 6px 12px; }
+.link-btn { padding: 8px 0; }
+.card { scroll-margin-top: 12px; }
+.ctl { -webkit-touch-callout: none; }
+.swipe { display: none; }
+
+/* Mobil og nettbrett: trekk-knappen blir en fast bunnlinje */
+@media (max-width: 860px) {
+  body { padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
+  .drawbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 15;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px;
+    border-radius: 0; border-width: 1px 0 0;
+    padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    box-shadow: 0 -6px 18px rgba(0, 0, 0, .14);
+  }
+  .drawbar .draw { order: 2; width: auto; padding: 12px 26px; font-size: 1.35rem; }
+  .drawbar .deckinfo { order: 1; font-size: .85rem; line-height: 1.3; }
+  .toast { bottom: calc(92px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* Telefon */
+@media (max-width: 600px) {
+  body { padding-top: 14px; }
+  .wrap { gap: 16px; }
+  header { gap: 12px; }
+  .brand h1 { font-size: 1.9rem; }
+  .brand p { font-size: .95rem; }
+  .classes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; gap: 6px; }
+  .cls { flex-direction: column; gap: 4px; padding: 8px 4px; text-align: center; min-width: 0; }
+  .cls b { font-size: .85rem; }
+  .cls small { font-size: .75rem; }
+  .card-head { padding: 10px 16px; }
+  .card-head .kl { font-size: .88rem; }
+  .card-head .nr { font-size: 1.8rem; }
+  .card-head .nr small { font-size: .85rem; }
+  .card-body { padding: 2px 16px 14px; }
+  .task { padding: 14px 0; }
+  .q { font-size: 1.02rem; grid-template-columns: 10px minmax(0, 1fr); gap: 10px; }
+  .q::before { width: 8px; height: 8px; }
+  .task-actions { padding-left: 0; }
+  .fasit { margin-left: 0; }
+  .card-foot { padding: 12px 16px; }
+  .card-foot .lead { width: 100%; }
+  .rate { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
+  .rate button { padding: 12px 8px; }
+  .panel { padding: 14px; }
+  .vehwrap { overflow-x: auto; margin: 0 -14px; padding: 0 14px 6px; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+  .vehwrap .vehicle { min-width: 600px; }
+  .vehwrap .v-CE { min-width: 860px; }
+  .swipe { display: block; }
+  .controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ctl { min-height: 52px; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .card, .switch, .switch::after, .draw { transition: none; }
   .fasit { animation: none; }
@@ -305,6 +374,8 @@ footer { color: var(--muted); font-size: .85rem; }
   .gauge .n1, .gauge .n2 { transition: none; }
 }
 </style>
+</head>
+<body>
 
 <div class="wrap">
   <header>
@@ -332,7 +403,8 @@ footer { color: var(--muted); font-size: .85rem; }
             <h2>Hvor på kjøretøyet?</h2>
             <span class="hint">Trykk på en del for å se hvilke kort den er med på.</span>
           </div>
-          <div id="vehicle"></div>
+          <div class="vehwrap" id="vehicle"></div>
+          <span class="hint swipe">Sveip sideveis for å se hele kjøretøyet.</span>
           <div class="parts" id="parts"></div>
           <div class="zinfo" id="zinfo"></div>
         </div>
@@ -383,18 +455,18 @@ footer { color: var(--muted); font-size: .85rem; }
     </section>
 
     <aside>
-      <div class="panel">
+      <div class="panel drawbar">
         <button class="draw" id="draw" type="button">Trekk kort</button>
         <p class="deckinfo" id="deckinfo"></p>
+      </div>
+
+      <div class="panel">
+        <h2>Alle kort</h2>
         <label class="opt" for="onlyWarn">
           <input type="checkbox" id="onlyWarn">
           <span class="switch" aria-hidden="true"></span>
           Trekk bare kort jeg må øve på
         </label>
-      </div>
-
-      <div class="panel">
-        <h2>Alle kort</h2>
         <div class="progress">
           <div class="bar" id="bar"></div>
           <div class="legend" id="legend"></div>
@@ -722,7 +794,7 @@ const combo = () => `
 function renderVehicle() {
   const w = { C: 790, CE: 1120, D: 800 }[cls];
   const body = { C: truck, CE: combo, D: bus }[cls]();
-  $("vehicle").innerHTML = `<svg class="vehicle" viewBox="0 0 ${w} 285" role="group" aria-label="Illustrasjon av ${DATA[cls].name.toLowerCase()}">
+  $("vehicle").innerHTML = `<svg class="vehicle v-${cls}" viewBox="0 0 ${w} 285" role="group" aria-label="Illustrasjon av ${DATA[cls].name.toLowerCase()}">
     <line class="ground" x1="10" y1="273" x2="${w - 10}" y2="273"/>${body}</svg>`;
   vehicleCls = cls;
 }
@@ -738,6 +810,20 @@ function applyVis() {
   $("zinfo").innerHTML = `<span class="hint">De gule delene hører til kort ${current + 1}. Trykk på en del av kjøretøyet for å se hva den heter og hvilke andre kort den er med på.</span>`;
   $("simPanel").hidden = !v.sim;
   if (v.sim) $("simTry").textContent = SIM_TRY[v.sim];
+  requestAnimationFrame(centerVehicle);
+}
+
+/* På smal skjerm kan tegningen scrolles sideveis: vis de markerte delene */
+function centerVehicle() {
+  const w = $("vehicle");
+  if (w.scrollWidth <= w.clientWidth + 1) return;
+  const hl = [...w.querySelectorAll(".z.hl")];
+  if (!hl.length) return;
+  const base = w.getBoundingClientRect();
+  let l = Infinity, r = -Infinity;
+  hl.forEach(g => { const b = g.getBoundingClientRect(); l = Math.min(l, b.left); r = Math.max(r, b.right); });
+  const c = (l + r) / 2 - base.left + w.scrollLeft;
+  w.scrollTo({ left: c - w.clientWidth / 2, behavior: reduced ? "auto" : "smooth" });
 }
 
 function showZone(id) {
@@ -921,7 +1007,7 @@ function show(i, animate) {
   setTimeout(() => { renderCard(); c.classList.remove("flipping"); }, 330);
 }
 
-function draw() {
+function drawCard() {
   const onlyWarn = $("onlyWarn").checked;
   if (onlyWarn) {
     const pool = DATA[cls].cards.map((_, i) => i).filter(i => ratings[key(cls, i)] === "warn");
@@ -934,6 +1020,14 @@ function draw() {
   const i = decks[cls].pop();
   drawn[cls].add(i);
   show(i, true);
+}
+function draw() {
+  drawCard();
+  // Trekk-knappen ligger nederst på mobil: sørg for at det nye kortet er synlig
+  if (matchMedia("(max-width: 860px)").matches) {
+    const t = $("card").getBoundingClientRect().top;
+    if (t < 0 || t > innerHeight * .5) $("card").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+  }
 }
 
 /* ---------- timer (snøkjetting maks 10 min) ---------- */
@@ -1066,6 +1160,7 @@ document.querySelectorAll("[data-hold]").forEach(b => {
   ["pointerup", "pointercancel", "lostpointercapture"].forEach(ev => b.addEventListener(ev, () => setHold(n, false)));
   b.addEventListener("keydown", e => { if ((e.key === " " || e.key === "Enter") && !e.repeat) { e.preventDefault(); setHold(n, true); } });
   b.addEventListener("keyup", e => { if (e.key === " " || e.key === "Enter") setHold(n, false); });
+  b.addEventListener("contextmenu", e => e.preventDefault());
 });
 
 /* ---------- start ---------- */
@@ -1077,3 +1172,6 @@ $("onlyWarn").checked = store.get("onlyWarn", false);
 renderClasses();
 show(0, false);
 </script>
+
+</body>
+</html>
