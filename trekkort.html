@@ -1,0 +1,1079 @@
+<title>Trekkort yrkessjåfør</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: verkstedbenk — kortet i midten til venstre, stokken og oversikten til høyre; stables på mobil */
+:root {
+  --bg: #EEF0EE;
+  --surface: #FFFFFF;
+  --surface-2: #F6F7F6;
+  --ink: #1B2127;
+  --muted: #5A646D;
+  --line: #D3D8DB;
+  --accent: #F2B200;      /* vegoppmerking-gul */
+  --accent-ink: #1B2127;
+  --ok: #1E7A4C;
+  --ok-bg: #E2F2E9;
+  --warn: #B4471F;
+  --warn-bg: #FBE9E1;
+  --shadow: 0 1px 2px rgba(20,25,30,.08), 0 8px 24px rgba(20,25,30,.08);
+  --f-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "Barlow", "Segoe UI", system-ui, sans-serif;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14181C; --surface: #1E242A; --surface-2: #192025; --ink: #E8ECEE; --muted: #9AA4AD;
+    --line: #333C44; --accent: #F5C02E; --accent-ink: #14181C;
+    --ok: #55C892; --ok-bg: #173226; --warn: #F2916A; --warn-bg: #3A2219;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14181C; --surface: #1E242A; --surface-2: #192025; --ink: #E8ECEE; --muted: #9AA4AD;
+  --line: #333C44; --accent: #F5C02E; --accent-ink: #14181C;
+  --ok: #55C892; --ok-bg: #173226; --warn: #F2916A; --warn-bg: #3A2219;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+  color-scheme: dark;
+}
+/* Illustrasjon og simulator */
+:root {
+  --veh: #DDE2E5; --veh-line: #3A444D; --glass: #BFD3DE; --tire: #2B3137; --zone: #C6CED4;
+  --hl-line: #B87C00; --hose-red: #D0342C; --hose-yellow: #E0A800;
+  --c1: #2563A8; --c2: #D0342C; --lamp-red: #E5372C; --lamp-amber: #E89B00;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --veh: #2C343B; --veh-line: #8D99A3; --glass: #3B5566; --tire: #0D1013; --zone: #46515B;
+    --hl-line: #F5C02E; --hose-red: #F0605A; --hose-yellow: #F5C02E;
+    --c1: #6FA8E8; --c2: #F0605A; --lamp-red: #FF5A4E; --lamp-amber: #FFB52E;
+  }
+}
+:root[data-theme="dark"] {
+  --veh: #2C343B; --veh-line: #8D99A3; --glass: #3B5566; --tire: #0D1013; --zone: #46515B;
+  --hl-line: #F5C02E; --hose-red: #F0605A; --hose-yellow: #F5C02E;
+  --c1: #6FA8E8; --c2: #F0605A; --lamp-red: #FF5A4E; --lamp-amber: #FFB52E;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 48px;
+}
+.wrap { max-width: 1080px; margin: 0 auto; display: grid; gap: 20px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible + .switch, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Header */
+header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; }
+.brand h1 {
+  font-family: var(--f-display); font-weight: 800; font-size: clamp(2rem, 5vw, 2.8rem);
+  line-height: 1; margin: 0; letter-spacing: .01em; text-transform: uppercase; text-wrap: balance;
+}
+.brand p { margin: 6px 0 0; color: var(--muted); max-width: 60ch; }
+.classes { display: flex; gap: 8px; flex-wrap: wrap; }
+.cls {
+  display: flex; align-items: center; gap: 10px;
+  border: 2px solid var(--line); background: var(--surface); border-radius: var(--r);
+  padding: 6px 14px 6px 6px; text-align: left;
+}
+.cls .code {
+  font-family: var(--f-display); font-weight: 800; font-size: 1.35rem; min-width: 2.4em; text-align: center;
+  border: 2px solid var(--ink); border-radius: 6px; padding: 0 6px; line-height: 1.4;
+}
+.cls small { display: block; color: var(--muted); font-size: .8rem; line-height: 1.2; }
+.cls b { display: block; font-weight: 600; line-height: 1.2; }
+.cls[aria-pressed="true"] { border-color: var(--ink); background: var(--accent); color: var(--accent-ink); }
+.cls[aria-pressed="true"] small { color: var(--accent-ink); opacity: .75; }
+.cls[aria-pressed="true"] .code { border-color: var(--accent-ink); }
+
+/* Main grid */
+.bench { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+@media (max-width: 860px) { .bench { grid-template-columns: minmax(0, 1fr); } }
+
+/* Card */
+.stage { perspective: 1400px; min-width: 0; }
+.card {
+  position: relative; transform-style: preserve-3d; transition: transform .55s cubic-bezier(.3,.7,.2,1);
+}
+.card.flipping { transform: rotateY(180deg); }
+.face {
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); border: 1px solid var(--line);
+  overflow: hidden;
+}
+.back {
+  position: absolute; inset: 0; transform: rotateY(180deg);
+  background: repeating-linear-gradient(135deg, var(--accent) 0 22px, var(--ink) 22px 44px);
+  display: grid; place-items: center;
+}
+.back span {
+  background: var(--surface); color: var(--ink); font-family: var(--f-display); font-weight: 800;
+  font-size: 1.6rem; padding: 6px 18px; border-radius: 8px; text-transform: uppercase; letter-spacing: .04em;
+}
+.card-head {
+  background: var(--accent); color: var(--accent-ink);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px;
+}
+.card-head .kl { font-family: var(--f-display); font-weight: 700; font-size: 1.05rem; text-transform: uppercase; letter-spacing: .06em; }
+.card-head .nr { font-family: var(--f-display); font-weight: 800; font-size: 2.1rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.card-head .nr small { font-size: 1rem; font-weight: 700; letter-spacing: .06em; margin-right: 6px; text-transform: uppercase; }
+.card-body { padding: 8px 20px 20px; }
+.intro { font-family: var(--f-display); font-weight: 700; font-size: 1.15rem; margin: 14px 0 0; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.tasks { list-style: none; margin: 0; padding: 0; display: grid; }
+.task { padding: 16px 0; border-bottom: 1px solid var(--line); display: grid; gap: 10px; }
+.task:last-child { border-bottom: 0; }
+.q { display: grid; grid-template-columns: 14px minmax(0,1fr); gap: 12px; align-items: start; font-size: 1.08rem; font-weight: 500; }
+.q::before { content: ""; width: 10px; height: 10px; background: var(--ink); margin-top: .5em; border-radius: 2px; }
+.task-actions { padding-left: 26px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn-fasit {
+  border: 1.5px solid var(--line); background: var(--surface-2); border-radius: 999px; padding: 4px 14px;
+  font-size: .9rem; font-weight: 600; color: var(--muted);
+}
+.btn-fasit:hover { border-color: var(--ink); color: var(--ink); }
+.btn-fasit[aria-expanded="true"] { color: var(--ink); border-color: var(--ink); }
+.fasit {
+  margin-left: 26px; background: var(--surface-2); border: 1.5px dashed var(--line); border-radius: 8px;
+  padding: 10px 14px; animation: drop .25s ease-out;
+}
+.fasit .lbl { font-family: var(--f-display); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .85rem; color: var(--muted); }
+.fasit p { margin: 2px 0 0; }
+.fasit .none { color: var(--muted); font-style: italic; }
+@keyframes drop { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+.timer {
+  display: inline-flex; align-items: center; gap: 8px; border: 1.5px solid var(--ink); border-radius: 999px;
+  padding: 3px 4px 3px 12px; font-size: .9rem; font-weight: 600;
+}
+.timer .t { font-variant-numeric: tabular-nums; font-family: var(--f-display); font-size: 1.15rem; min-width: 3.2em; }
+.timer.over .t { color: var(--warn); }
+.timer button { border: 0; background: var(--ink); color: var(--surface); border-radius: 999px; padding: 2px 12px; font-size: .85rem; }
+
+.card-foot {
+  border-top: 1px solid var(--line); background: var(--surface-2); padding: 14px 20px;
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;
+}
+.card-foot .lead { color: var(--muted); font-size: .9rem; }
+.rate { display: flex; gap: 8px; flex-wrap: wrap; }
+.rate button { border-radius: 8px; padding: 8px 14px; font-weight: 600; border: 2px solid var(--line); background: var(--surface); }
+.rate .r-ok[aria-pressed="true"] { background: var(--ok-bg); border-color: var(--ok); color: var(--ok); }
+.rate .r-warn[aria-pressed="true"] { background: var(--warn-bg); border-color: var(--warn); color: var(--warn); }
+
+.card-tools { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.link-btn { border: 0; background: none; color: var(--muted); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; padding: 4px 0; }
+.link-btn:hover { color: var(--ink); }
+
+/* Side panel */
+aside { display: grid; gap: 16px; min-width: 0; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 14px; }
+.panel h2 { margin: 0; font-family: var(--f-display); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; font-size: 1.05rem; }
+.draw {
+  width: 100%; border: 0; border-radius: 12px; background: var(--ink); color: var(--surface);
+  font-family: var(--f-display); font-weight: 800; font-size: 1.6rem; text-transform: uppercase; letter-spacing: .05em;
+  padding: 14px; transition: transform .1s;
+}
+.draw:hover { transform: translateY(-1px); }
+.draw:active { transform: translateY(1px); }
+.deckinfo { color: var(--muted); font-size: .92rem; margin: 0; font-variant-numeric: tabular-nums; }
+.opt { display: flex; align-items: center; gap: 10px; font-size: .95rem; cursor: pointer; }
+.opt input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.switch { width: 40px; height: 24px; border-radius: 999px; background: var(--line); position: relative; flex: none; transition: background .15s; }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--surface); transition: transform .15s; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+.opt input:checked + .switch { background: var(--ink); }
+.opt input:checked + .switch::after { transform: translateX(16px); }
+
+.progress { display: grid; gap: 6px; }
+.bar { height: 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; display: flex; }
+.bar i { display: block; height: 100%; }
+.bar .b-ok { background: var(--ok); }
+.bar .b-warn { background: var(--warn); }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: .85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.legend span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 6px; background: var(--line); }
+.legend .l-ok::before { background: var(--ok); }
+.legend .l-warn::before { background: var(--warn); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap: 6px; }
+.chip {
+  aspect-ratio: 1; max-width: 100%; border-radius: 8px; border: 2px solid var(--line); background: var(--surface-2);
+  font-family: var(--f-display); font-weight: 700; font-size: 1.2rem; font-variant-numeric: tabular-nums;
+  display: grid; place-items: center; position: relative;
+}
+.chip:hover { border-color: var(--muted); }
+.chip.ok { background: var(--ok-bg); border-color: var(--ok); color: var(--ok); }
+.chip.warn { background: var(--warn-bg); border-color: var(--warn); color: var(--warn); }
+.chip.drawn::after { content: ""; position: absolute; top: 4px; right: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--muted); }
+.chip[aria-current="true"] { outline: 3px solid var(--accent); outline-offset: 1px; border-color: var(--ink); }
+.hint { font-size: .82rem; color: var(--muted); margin: 0; }
+.reset { justify-self: start; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+  background: var(--ink); color: var(--surface); padding: 10px 18px; border-radius: 10px; font-weight: 500;
+  box-shadow: var(--shadow); max-width: calc(100% - 32px); z-index: 20;
+}
+footer { color: var(--muted); font-size: .85rem; }
+
+/* Illustrasjon */
+.visual { margin-top: 20px; display: grid; gap: 16px; }
+.vis-head { display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: baseline; justify-content: space-between; }
+.vehicle { width: 100%; height: auto; display: block; }
+.vehicle .base { fill: var(--veh); stroke: var(--veh-line); stroke-width: 2; }
+.vehicle .glass { fill: var(--glass); stroke: var(--veh-line); stroke-width: 2; }
+.vehicle .detail { fill: none; stroke: var(--veh-line); stroke-width: 2; }
+.vehicle .ground { stroke: var(--line); stroke-width: 2; stroke-dasharray: 8 6; }
+.vehicle .hubdot { fill: var(--veh-line); }
+.z { cursor: pointer; outline: none; }
+.z > * { fill: var(--zone); stroke: var(--veh-line); stroke-width: 2; transition: fill .2s, stroke .2s; }
+.z .tire { fill: var(--tire); }
+.z .rim { fill: var(--veh); }
+.z .ring { fill: none; stroke-width: 3; }
+.z .dashed { stroke-dasharray: 6 4; }
+.z .ln { fill: none; stroke: var(--muted); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.z .hose { fill: none; stroke-width: 5; stroke-linecap: round; }
+.z .hose.red { stroke: var(--hose-red); }
+.z .hose.yellow { stroke: var(--hose-yellow); }
+.z:hover > *, .z:focus-visible > * { stroke: var(--ink); }
+.z.hl > *:not(.ln):not(.hose):not(.ring):not(.rim) { fill: var(--accent); stroke: var(--ink); }
+.z.hl .ln, .z.hl .ring { stroke: var(--hl-line); }
+.z.hl .ln { stroke-width: 6; }
+.z.hl .hose { stroke-width: 8; }
+.z.hl { animation: pulse 1.8s ease-in-out infinite; }
+.z.focus > * { stroke: var(--ink); stroke-width: 4; }
+.z.focus .ln { stroke-width: 7; }
+@keyframes pulse { 50% { opacity: .62; } }
+.parts { display: flex; flex-wrap: wrap; gap: 6px; }
+.part {
+  border: 1.5px solid var(--ink); background: var(--accent); color: var(--accent-ink);
+  border-radius: 999px; padding: 3px 12px; font-size: .88rem; font-weight: 600;
+}
+.zinfo { min-height: 3.2em; font-size: .95rem; border-top: 1px solid var(--line); padding-top: 12px; }
+.zinfo p { margin: 4px 0 0; }
+.cardlinks { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; }
+.mini {
+  border: 2px solid var(--line); background: var(--surface-2); border-radius: 6px; padding: 1px 10px;
+  font-family: var(--f-display); font-weight: 700; font-size: 1.05rem;
+}
+.mini:hover { border-color: var(--ink); }
+
+/* Simulator */
+.try { background: var(--surface-2); border-radius: 8px; padding: 10px 14px; margin: 0; font-size: .95rem; }
+.sim { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 600px) { .sim { grid-template-columns: minmax(0, 1fr); } .gauge { max-width: 260px; width: 100%; margin: 0 auto; } }
+.gauge svg { width: 100%; height: auto; display: block; }
+.gauge .face { fill: var(--surface-2); stroke: var(--veh-line); stroke-width: 3; }
+.gauge .tick { stroke: var(--ink); stroke-width: 2; }
+.gauge text { fill: var(--ink); font-family: var(--f-display); font-weight: 700; font-size: 14px; text-anchor: middle; dominant-baseline: middle; }
+.gauge .unit { fill: var(--muted); font-size: 12px; font-weight: 600; }
+.gauge .danger { fill: none; stroke: var(--lamp-red); stroke-width: 6; opacity: .55; }
+.gauge .n1, .gauge .n2 { stroke-width: 4; stroke-linecap: round; transition: transform .1s linear; }
+.gauge .n1 { stroke: var(--c1); }
+.gauge .n2 { stroke: var(--c2); }
+.gauge .hub { fill: var(--ink); }
+.readout { display: flex; flex-wrap: wrap; gap: 2px 14px; justify-content: center; font-size: .9rem; font-variant-numeric: tabular-nums; margin-top: 6px; }
+.sw { display: inline-block; width: 14px; height: 4px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+.s1 { background: var(--c1); } .s2 { background: var(--c2); }
+.simside { display: grid; gap: 12px; min-width: 0; }
+.lamps { display: flex; gap: 8px; flex-wrap: wrap; }
+.lamp { display: inline-flex; align-items: center; gap: 6px; font-size: .85rem; font-weight: 600; padding: 4px 10px; border-radius: 999px; border: 1.5px solid var(--line); color: var(--muted); }
+.lamp::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+.lamp.on { color: var(--ink); }
+.lamp.red.on { border-color: var(--lamp-red); }
+.lamp.red.on::before { background: var(--lamp-red); box-shadow: 0 0 8px var(--lamp-red); }
+.lamp.amber.on { border-color: var(--lamp-amber); }
+.lamp.amber.on::before { background: var(--lamp-amber); box-shadow: 0 0 8px var(--lamp-amber); }
+.controls { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.ctl {
+  border: 2px solid var(--line); background: var(--surface); border-radius: 8px; padding: 8px 10px;
+  font-weight: 600; font-size: .92rem; text-align: left; touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.ctl:hover { border-color: var(--muted); }
+.ctl[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.ctl.held { background: var(--accent); color: var(--accent-ink); border-color: var(--ink); }
+.simopts { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; font-size: .95rem; }
+.simopts select { font: inherit; padding: 4px 8px; border-radius: 6px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); }
+.simmsg { margin: 0; min-height: 1.5em; font-weight: 600; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .switch, .switch::after, .draw { transition: none; }
+  .fasit { animation: none; }
+  .z.hl { animation: none; }
+  .gauge .n1, .gauge .n2 { transition: none; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <h1>Trekkort yrkessjåfør</h1>
+      <p>Øv på kontrollkortene du kan trekke på oppkjøringen. Trekk et kort, gjør oppgavene, og sjekk fasit etterpå.</p>
+    </div>
+    <div class="classes" role="group" aria-label="Velg førerkortklasse" id="classes"></div>
+  </header>
+
+  <div class="bench">
+    <section class="stage" aria-live="polite">
+      <div class="card-tools">
+        <button class="link-btn" id="allFasit" type="button">Vis all fasit</button>
+        <span class="hint" id="deckHint"></span>
+      </div>
+      <div class="card" id="card">
+        <div class="face front" id="front"></div>
+        <div class="face back" aria-hidden="true"><span>Trekkort</span></div>
+      </div>
+
+      <div class="visual">
+        <div class="panel">
+          <div class="vis-head">
+            <h2>Hvor på kjøretøyet?</h2>
+            <span class="hint">Trykk på en del for å se hvilke kort den er med på.</span>
+          </div>
+          <div id="vehicle"></div>
+          <div class="parts" id="parts"></div>
+          <div class="zinfo" id="zinfo"></div>
+        </div>
+
+        <div class="panel" id="simPanel" hidden>
+          <h2>Simulator: trykkluft og varsellamper</h2>
+          <p class="try" id="simTry"></p>
+          <div class="sim">
+            <div class="gauge">
+              <div id="gauge"></div>
+              <div class="readout">
+                <span><i class="sw s1"></i>Krets 1: <b id="r1">8,0</b> bar</span>
+                <span><i class="sw s2"></i>Krets 2: <b id="r2">8,0</b> bar</span>
+              </div>
+            </div>
+            <div class="simside">
+              <div class="lamps">
+                <span class="lamp red" id="lAir">Lavt lufttrykk</span>
+                <span class="lamp amber" id="lAbs">ABS</span>
+                <span class="lamp amber" id="lGlow">Gløding</span>
+              </div>
+              <div class="controls">
+                <button class="ctl" type="button" id="cIgn" aria-pressed="false">Tenning</button>
+                <button class="ctl" type="button" id="cEng" aria-pressed="false">Motor</button>
+                <button class="ctl" type="button" data-hold="pedal">Bremsepedal (hold inne)</button>
+                <button class="ctl" type="button" data-hold="d0">Tapp luft krets 1 (hold)</button>
+                <button class="ctl" type="button" data-hold="d1">Tapp luft krets 2 (hold)</button>
+                <button class="ctl" type="button" id="cPark">Løs parkeringsbrems</button>
+                <button class="ctl" type="button" id="cSperre">Trykk inn sperreventil</button>
+                <button class="ctl" type="button" id="cReset">Nullstill</button>
+              </div>
+              <div class="simopts">
+                <label for="leak">Lekkasje:</label>
+                <select id="leak">
+                  <option value="none">Ingen</option>
+                  <option value="mater">I matersystemet</option>
+                  <option value="manover">I manøversystemet</option>
+                  <option value="ukjent">Ukjent: finn feilen</option>
+                </select>
+                <button class="link-btn" type="button" id="leakAns" hidden>Vis svar</button>
+                <label class="opt" for="sound"><input type="checkbox" id="sound" checked><span class="switch" aria-hidden="true"></span>Lyd</label>
+              </div>
+              <p class="simmsg" id="simMsg" aria-live="polite">Slå på tenningen for å starte.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside>
+      <div class="panel">
+        <button class="draw" id="draw" type="button">Trekk kort</button>
+        <p class="deckinfo" id="deckinfo"></p>
+        <label class="opt" for="onlyWarn">
+          <input type="checkbox" id="onlyWarn">
+          <span class="switch" aria-hidden="true"></span>
+          Trekk bare kort jeg må øve på
+        </label>
+      </div>
+
+      <div class="panel">
+        <h2>Alle kort</h2>
+        <div class="progress">
+          <div class="bar" id="bar"></div>
+          <div class="legend" id="legend"></div>
+        </div>
+        <div class="grid" id="grid"></div>
+        <p class="hint">Trykk på et nummer for å åpne kortet. Prikk = trukket i denne runden.</p>
+        <button class="link-btn reset" id="reset" type="button">Nullstill min fremgang</button>
+      </div>
+    </aside>
+  </div>
+
+  <footer>Kilde: Trekkort C, CE og D med fasit, Sauda vgs. Fremgangen lagres bare i denne nettleseren.</footer>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const DATA = {
+  C: {
+    code: "C", name: "Lastebil", full: "Trekkort klasse C",
+    cards: [
+      { tasks: [
+        ["Kontrollere at bremsenes matersystem er tett.", "Pump opp lufttrykk, stopp motor (tenning på), gå rundt og lytt."],
+        ["Kontrollere at bremsenes manøversystem er tett.", "Pump opp lufttrykk, stopp motor (tenning på), trå inn bremsepedal (evt. ved hjelp av varseltrekant o.l.) og gå ut og lytt. Følg med på manometer."]
+      ]},
+      { tasks: [
+        ["Kontroller at varselanordningen for lavt lufttrykk i bremseanlegget fungerer.", "Stopp motor, pump bremsepedal (evt. tapp luft fra tank) til alarmen går (lyd og lys)."],
+        ["Kontrollere at varselanordningen for ABS-systemet virker som den skal.", "Se til at lys tennes og så slukkes."],
+        ["Kontroller på en enkel måte at kompressoren gir nok luft.", "Tapp ut luft fra tanker, start så opp bilen og se på manometer at luften fylles opp igjen."]
+      ]},
+      { timer: 600, tasks: [
+        ["Monter snøkjetting på et av drivhjulene.", "Utføres. Tidsbruk maks 10 min med etterstramming."]
+      ]},
+      { tasks: [
+        ["Vis bruken av fartsskriver når to sjåfører deler på kjøringen.", "Utføres (sjåfør 1 i skuff 1, passasjer/sjåfør 2 i skuff 2)."],
+        ["Pek på de forskjellige symbolene foran på fartsskriveren og fortell når de skal brukes.", "Utføres."],
+        ["Vis hvordan du setter skriveren inn/ut av «Out».", "Utføres."],
+        ["Vis hvordan du tar utskrift av bil/sjåfør.", "Utføres."]
+      ]},
+      { tasks: [
+        ["Kontroller at bilens 2-krets bremseanlegg virker som to uavhengige kretser.", "Motor av, tapp luft fra tank 1 eller 2 til begge nålene (manometer) viser ca. 6 bar. Se så til at kun den ene fortsetter å falle, mens den andre stopper på ca. 6 bar."],
+        ["Kontroller at blokkeringsventilen/sperreventilen virker som den skal (ikke krav etter 01.10.92).", "Motor av, tapp luft som beskrevet over. Start så opp bilen og få trykk i begge kretsene. Prøv så å ta av parkeringsbrems og sjekk at bilen ikke kan flyttes. Trykk deretter inn sperreventil og sjekk at bilen kan flyttes."]
+      ]},
+      { tasks: [
+        ["Kontroller batteriene.", "Sjekk at batteriene sitter fast, er rene (inkludert batteripolene), evt. syrenivå og skader."]
+      ]},
+      { intro: "Ved opphold undervegs", tasks: [
+        ["Kontroller funksjon lufttørke.", "Utføres."],
+        ["Kontroller varmgang i dekk.", "Utføres."],
+        ["Kontroller varmgang i nav.", "Utføres."],
+        ["Kontroller varmgang i bremser.", "Utføres."],
+        ["Hvis det er unormalt varmt, hva kan årsaken være? Forklar.", null]
+      ]},
+      { tasks: [
+        ["Kontroller dekk og felg.", "Skader, løse hjulmuttere, mønsterdybde, dimensjoner i forhold til vognkort."],
+        ["Ettertrekk hjulmutterne på et hjul.", "Utføres."],
+        ["Mål lufttrykket i et av hjulene og vurder om det er korrekt.", "Utfør/forklar."]
+      ]},
+      { tasks: [
+        ["Vis hvordan bilens kaldstartanordning/forvarming/gløding brukes.", "Sett på tenning, se at glødelampe tennes og så slukkes før oppstart."],
+        ["Kontroller at frostvern/lufttørker i bremsene virker.", "Tapp luft fra en tank. Kommer det fuktighet ut, er det feil med lufttørken."]
+      ]},
+      { timer: 600, tasks: [
+        ["Monter snøkjetting på et av drivhjulene.", "Utføres. Tidsbruk maks 10 min med etterstramming."]
+      ]},
+      { tasks: [
+        ["Vis framgangsmåten ved lufting av dieselsystemet.", "Se i instruksjonsbok!"],
+        ["Vis hvor sikringer og relé er plassert.", "Se i instruksjonsbok!"],
+        ["Pek på: turbo, luftfilter, dieselfilter, dyserør.", "Vipp hytten frem, utfør/pek/forklar."]
+      ]},
+      { tasks: [
+        ["Forklar rett lysbruk.", "Parkert = parklys. Kjøring = nærlys. Nød/kjetting = park- og nødlys."],
+        ["Forklar hvordan du skifter hovedlyspære på denne bilen.", "Utfør."],
+        ["Finn refleks, varseltrekant og evt. førstehjelps- og brannutstyr.", "Utføres."]
+      ]},
+      { tasks: [
+        ["Vis fremgangsmåter for løsing av parkeringsbrems når bremseanlegget er uten trykkluft.", "Luft kan fylles fra annet kjøretøy (evt. fra et hjul) over til egen bil, evt. kan parkbremseklokker skrues ut for å frigjøre."]
+      ]},
+      { tasks: [
+        ["Kontroller servostyring: virkning, oljenivå og lekkasjer.", "Se."],
+        ["Kontroller dødgang på rattet.", "Vri på rattet før oppstart og observer forskjell mellom vridning på ratt og faktisk bevegelse. Gjenta etter oppstart og observer."]
+      ]},
+      { tasks: [
+        ["Kontroller om bilens dekk og felg stemmer med vognkortet.", "Bruk vognkort, se på dekk."],
+        ["Kontroller dekkslitasje på forhjul.", "Måles. Husk: maks 25 % av dekkets overflate kan være slitt under krav."]
+      ]},
+      { tasks: [
+        ["Vis og forklar fremgangsmåte for sleping.", "Slepefeste i front og fjerning av mellomaksel i bakre ende (husk å feste opp!). Slepes med wire eller stag? (Skal ikke utføres!)"],
+        ["Vis og forklar fremgangsmåte ved punktering.", "Finn ut om det er reservehjul, bruk bilens verktøy. (Skal ikke utføres!)"]
+      ]},
+      { intro: "Vognkort", tasks: [
+        ["Vekt / egenvekt / nyttelast / aktuell vekt.", "Finn vognkort, vis/forklar."],
+        ["Merknader.", "Finn vognkort, vis/forklar."]
+      ]}
+    ]
+  },
+  CE: {
+    code: "CE", name: "Bil og tilhenger", full: "Trekkort bil og tilhenger CE",
+    cards: [
+      { tasks: [
+        ["Mål slaglengden på en av bremsehevearmene og avgjør om den er riktig eller feil.", "Utføres, der det er trommelbrems!"],
+        ["Pek på delene og forklar om slaglengden blir justert automatisk eller manuelt.", "Utføres."]
+      ]},
+      { tasks: [
+        ["Monter kjetting på et av tilhengerhjulene.", "Utføres."]
+      ]},
+      { tasks: [
+        ["Utfør frakopling og sikring av tilhenger.", "Utføres."],
+        ["Kjør en runde og utfør tilkopling av tilhenger.", "Utføres."],
+        ["Kontroller slitasje i tilhengerkopling og drag.", "Måles med «tolk» som henger i verksted. Maks slitasje 3 mm i øye/drag og 2 mm på bolt/bil."]
+      ]},
+      { tasks: [
+        ["Påvis hvilken av bremseslangene som er materslange og hvilken som er manøverslange.", "Mater er til høyre i kjøreretning, manøver er til venstre."],
+        ["Kontroller at bilens bremsesystem ikke tømmes for luft ved brudd i matersystemet til tilhenger.", "Stopp motoren, ta av koblingen (duomatic) mellom bil og henger, trykk inn på materpakningen på bilens side (høyre) og se til at bilens kretser ikke går under 6 bar."]
+      ]},
+      { tasks: [
+        ["Kontroller at katastrofebremsen virker.", "Koble av duomatic og prøv å dra henger fremover."],
+        ["Kontroller at rangeringsventilen virker som den skal, og nevn kort hva den brukes til.", "Koble av duomatic, trykk så inn/dra ut rangeringsventilen og sjekk at hengeren kan flyttes."],
+        ["Hvordan høydereguleres tilhengeren?", "Bruk hev/senk-betjening."]
+      ]},
+      { tasks: [
+        ["Monter kjetting på et av tilhengerhjulene.", "Utføres."]
+      ]},
+      { tasks: [
+        ["Utfør frakopling og sikring av tilhenger.", "Utføres."],
+        ["Kjør en runde og utfør tilkopling av tilhenger.", "Utføres."],
+        ["Påvis hvilke tilhengere du kan trekke.", "Kontroller «VBG»-koblingen: er det gummiforing eller ikke? Med gummikobling er det et slepfeste, uten gummi er det et kombifeste (slep og påheng)."]
+      ]},
+      { tasks: [
+        ["Kontroller om det er kondens i tilhengerens trykklufttanker.", "Tapp luft og sjekk om det kommer fuktighet sammen med luften."],
+        ["Påvis riktig bremseslange for påfylling av ekstra frosthindrende væske.", "Fylles i materslangen (høyre i kjøreretning)."]
+      ]}
+    ]
+  },
+  D: {
+    code: "D", name: "Buss", full: "Trekkort buss",
+    cards: [
+      { tasks: [
+        ["Kontrollere at bremsenes matersystem er tett.", "Pump opp lufttrykk, stopp motor (tenning på), gå rundt og lytt."],
+        ["Kontrollere at bremsenes manøversystem er tett.", "Pump opp lufttrykk, stopp motor (tenning på), trå inn bremsepedal (evt. ved hjelp av varseltrekant o.l.) og gå ut og lytt. Følg med på manometer."]
+      ]},
+      { tasks: [
+        ["Kontroller at varselanordningen for lavt lufttrykk i bremseanlegget fungerer.", "Stopp motor, pump bremsepedal (evt. tapp luft fra tank) til alarmen går (lyd og lys)."],
+        ["Kontrollere at varselanordningen for ABS-systemet virker som den skal.", "Se til at lys tennes og så slukkes."],
+        ["Kontroller på en enkel måte at kompressoren gir nok luft.", "Tapp ut luft fra tanker, start så opp bussen og se på manometer at luften fylles opp igjen."]
+      ]},
+      { timer: 600, tasks: [
+        ["Monter snøkjetting på et av drivhjulene.", "Utføres. Tidsbruk maks 10 min med etterstramming."]
+      ]},
+      { tasks: [
+        ["Vis bruken av fartsskriver når to sjåfører deler på kjøringen.", "Utføres (sjåfør 1 i skuff 1, passasjer/sjåfør 2 i skuff 2)."],
+        ["Pek på de forskjellige symbolene foran på fartsskriveren og fortell når de skal brukes.", "Utføres."],
+        ["Vis hvordan du setter skriveren inn/ut av «Out».", "Utføres."],
+        ["Vis hvordan du tar utskrift av bil/sjåfør.", "Utføres."]
+      ]},
+      { tasks: [
+        ["Kontroller batteriene.", "Sjekk at batteriene sitter fast, er rene (inkludert batteripolene), evt. syrenivå og skader."]
+      ]},
+      { intro: "Ved opphold undervegs", tasks: [
+        ["Kontroller funksjon lufttørke.", "Utføres."],
+        ["Kontroller varmgang i dekk.", "Utføres."],
+        ["Kontroller varmgang i nav.", "Utføres."],
+        ["Kontroller varmgang i bremser.", "Utføres."],
+        ["Hvis det er unormalt varmt, hva kan årsaken være? Forklar.", null]
+      ]},
+      { tasks: [
+        ["Kontroller dekk og felg.", "Skader, løse hjulmuttere, mønsterdybde, dimensjoner i forhold til vognkort."],
+        ["Ettertrekk hjulmutterne på et hjul.", "Utføres."],
+        ["Mål lufttrykket i et av hjulene og vurder om det er korrekt.", "Utfør/forklar."]
+      ]},
+      { tasks: [
+        ["Vis nødutganger.", "Merking av vindu, takluke og dører som brukes som nødutgang."],
+        ["Vis nødutstyr.", "Hammer, førstehjelpsutstyr, brannslukkingsapparat (årskontroll)."]
+      ]},
+      { tasks: [
+        ["Vis og forklar fremgangsmåte for sleping.", "Slepefeste i front. Slepes med wire eller stag, eller løftes i brille. (Skal ikke utføres!)"],
+        ["Vis og forklar fremgangsmåte ved punktering.", "Finn ut om det er reservehjul, bruk bussens verktøy. (Skal ikke utføres!)"]
+      ]},
+      { intro: "Vognkort", tasks: [
+        ["Vekt / egenvekt / nyttelast / aktuell vekt.", "Finn vognkort, vis/forklar."],
+        ["Merknader.", "Finn vognkort, vis/forklar."]
+      ]}
+    ]
+  }
+};
+
+/* ---------- illustrasjon: hvilke deler hører til hvert kort ---------- */
+const VIS = {
+  C: [
+    { z: ["mater", "manover", "tanker", "kompressor", "dash"], sim: "tett" },
+    { z: ["dash", "kompressor", "tanker"], sim: "varsel" },
+    { z: ["hjulDrift"] },
+    { z: ["tacho"] },
+    { z: ["tanker", "dash", "parkbrems"], sim: "krets" },
+    { z: ["batteri"] },
+    { z: ["torke", "hjulDrift", "hjulFor", "nav", "brems"] },
+    { z: ["hjulDrift", "hjulFor", "papir"] },
+    { z: ["dash", "torke", "tanker"], sim: "glod" },
+    { z: ["hjulDrift"] },
+    { z: ["motor", "sikring"] },
+    { z: ["lys", "sikkerhet"] },
+    { z: ["parkbrems", "tanker"] },
+    { z: ["ratt"] },
+    { z: ["hjulFor", "papir"] },
+    { z: ["slep", "aksel", "verktoy"] },
+    { z: ["papir"] }
+  ],
+  CE: [
+    { z: ["bremsearm"] },
+    { z: ["hengerHjul"] },
+    { z: ["kobling", "slanger"] },
+    { z: ["slanger", "tanker"] },
+    { z: ["slanger", "rangering", "hoyde"] },
+    { z: ["hengerHjul"] },
+    { z: ["kobling", "slanger"] },
+    { z: ["hengerTanker", "slanger"] }
+  ],
+  D: [
+    { z: ["mater", "manover", "tanker", "kompressor", "dash"], sim: "tett" },
+    { z: ["dash", "kompressor", "tanker"], sim: "varsel" },
+    { z: ["hjulDrift"] },
+    { z: ["tacho"] },
+    { z: ["batteri"] },
+    { z: ["torke", "hjulDrift", "hjulFor", "nav", "brems"] },
+    { z: ["hjulDrift", "hjulFor", "papir"] },
+    { z: ["nodutgang", "nodutstyr"] },
+    { z: ["slep", "verktoy"] },
+    { z: ["papir"] }
+  ]
+};
+const LABELS = {
+  mater: "Matersystem", manover: "Manøversystem", kompressor: "Kompressor", tanker: "Lufttanker",
+  torke: "Lufttørke", dash: "Instrumentpanel: manometer og varsellamper", tacho: "Fartsskriver",
+  hjulDrift: "Drivhjul", hjulFor: "Forhjul (styrehjul)", nav: "Hjulnav", brems: "Bremser", batteri: "Batterier",
+  motor: "Motorrom: turbo, luftfilter, dieselfilter og dyserør", ratt: "Ratt og servostyring", lys: "Hovedlys",
+  sikkerhet: "Varseltrekant, refleks, førstehjelp og brannutstyr", papir: "Vognkort", slep: "Slepefeste foran",
+  aksel: "Mellomaksel (kardang)", sikring: "Sikringer og relé", parkbrems: "Parkbremseklokker (fjærbremser)",
+  verktoy: "Reservehjul og verktøy",
+  nodutgang: "Nødutganger: merkede vinduer, takluke og dører", nodutstyr: "Nødutstyr: hammer, førstehjelp og brannslukker",
+  hengerHjul: "Tilhengerhjul", bremsearm: "Bremsesylinder og bremsehevearm", hengerTanker: "Trykklufttanker på tilhengeren",
+  rangering: "Ventiler på tilhengeren: rangeringsventil og katastrofebrems", hoyde: "Hev/senk-betjening",
+  kobling: "Tilhengerkopling (VBG), drag og øye", slanger: "Bremseslanger: mater og manøver"
+};
+const LABEL_OVERRIDE = { D: { verktoy: "Bagasjerom: verktøy og evt. reservehjul" } };
+const FACTS = {
+  slanger: "Rød kobling er mater og sitter til høyre i kjøreretning. Gul kobling er manøver og sitter til venstre.",
+  motor: "Vipp hytta fram for å komme til.",
+  parkbrems: "Fjærbremsene holder bilen når lufttrykket er borte. Uten luft kan de skrues ut for å frigjøre bilen.",
+  mater: "Fører luft fra kompressoren til tankene.",
+  manover: "Fører luft fra tankene via bremsepedalen til bremsene."
+};
+const SIM_TRY = {
+  tett: "Velg en lekkasje, og stopp motoren med tenningen på. Faller trykket uten at du bremser, lekker matersystemet. Faller det bare når bremsepedalen holdes inne, lekker manøversystemet.",
+  varsel: "Slå på tenningen og se at ABS-lampa tennes og slukker. Stopp motoren og pump på bremsepedalen til varsellampa for lavt lufttrykk tennes. Tapp ut luft, start motoren og se at kompressoren fyller opp igjen.",
+  krets: "Stopp motoren og hold inne «Tapp luft krets 1» til begge nålene viser ca. 6 bar. Fortsett å tappe: nå skal bare den ene nålen falle. Start motoren, bygg opp trykket og prøv å løse parkeringsbremsen.",
+  glod: "Slå på tenningen og vent til glødelampa slukker før du starter motoren."
+};
+
+let vehicleCls = null;
+const lbl = id => (LABEL_OVERRIDE[cls] || {})[id] || LABELS[id];
+const z = (id, inner) => `<g class="z" data-z="${id}" tabindex="0" role="button" aria-label="${lbl(id)}">${inner}</g>`;
+const wheel = (cx, id, extra = true) =>
+  z(id, `<circle class="tire" cx="${cx}" cy="240" r="32"/><circle class="rim" cx="${cx}" cy="240" r="19"/>`) +
+  (extra ? z("brems", `<circle class="ring" cx="${cx}" cy="240" r="13"/>`) + z("nav", `<circle cx="${cx}" cy="240" r="6"/>`)
+         : `<circle class="hubdot" cx="${cx}" cy="240" r="6"/>`);
+
+const truck = () => `
+  <rect class="base" x="50" y="196" width="640" height="12"/>
+  <rect class="base" x="50" y="62" width="450" height="130" rx="4"/>
+  <path class="base" d="M520,196 L520,48 Q520,36 532,36 L688,36 Q702,36 706,50 L728,150 L728,196 Z"/>
+  <path class="glass" d="M598,50 L690,50 L705,118 L598,118 Z"/>
+  <path class="detail" d="M575,60 L575,190"/>
+  <rect class="base" x="700" y="190" width="36" height="14" rx="3"/>
+  ${z("motor", `<rect class="dashed" x="605" y="140" width="88" height="50" rx="4"/>`)}
+  ${z("aksel", `<path class="ln" d="M245,252 L585,252 L600,212"/>`)}
+  ${z("mater", `<path class="ln" d="M548,190 L548,205 L320,205 L320,212"/>`)}
+  ${z("manover", `<path class="ln" d="M600,160 L600,199 L160,199 L160,227 M245,199 L245,227 M600,199 L640,199 L640,227"/>`)}
+  ${z("tanker", `<rect x="290" y="212" width="60" height="24" rx="12"/><rect x="356" y="212" width="60" height="24" rx="12"/>`)}
+  ${z("torke", `<rect x="425" y="210" width="18" height="28" rx="4"/>`)}
+  ${z("batteri", `<rect x="455" y="212" width="50" height="28" rx="3"/>`)}
+  ${z("verktoy", `<circle cx="90" cy="226" r="18"/>`)}
+  ${wheel(160, "hjulDrift")}${wheel(245, "hjulDrift")}${wheel(640, "hjulFor")}
+  ${z("parkbrems", `<circle cx="202" cy="224" r="9"/>`)}
+  ${z("kompressor", `<circle cx="548" cy="180" r="10"/>`)}
+  ${z("sikring", `<rect x="530" y="116" width="26" height="16" rx="2"/>`)}
+  ${z("sikkerhet", `<path d="M550,146 L563,168 L537,168 Z"/>`)}
+  ${z("papir", `<rect x="580" y="134" width="18" height="24" rx="2"/>`)}
+  ${z("dash", `<rect x="598" y="118" width="70" height="14" rx="2"/>`)}
+  ${z("tacho", `<rect x="670" y="118" width="26" height="14" rx="2"/>`)}
+  ${z("ratt", `<path class="ln" d="M612,126 L626,104"/><ellipse cx="630" cy="96" rx="5" ry="16" transform="rotate(25 630 96)"/>`)}
+  ${z("lys", `<rect x="716" y="158" width="12" height="16" rx="2"/>`)}
+  ${z("slep", `<rect x="736" y="192" width="10" height="8" rx="1"/><circle cx="751" cy="196" r="5"/>`)}`;
+
+const bus = () => `<g transform="translate(800 0) scale(-1 1)">
+  <path class="base" d="M40,220 L40,64 Q40,50 54,50 L726,50 Q744,50 747,68 L752,200 Q752,220 736,220 Z"/>
+  ${[60, 210, 345, 495, 570].map(x => `<rect class="glass" x="${x}" y="70" width="62" height="58" rx="4"/>`).join("")}
+  <path class="glass" d="M700,66 L736,66 Q744,66 745,76 L748,150 L700,150 Z"/>
+  ${z("nodutgang", `<rect x="135" y="70" width="62" height="58" rx="4"/><rect x="420" y="70" width="62" height="58" rx="4"/><rect x="380" y="42" width="60" height="8" rx="2"/><rect x="285" y="66" width="48" height="150" rx="3"/><rect x="645" y="66" width="48" height="150" rx="3"/>`)}
+  ${z("nodutstyr", `<rect x="232" y="132" width="16" height="6" rx="1"/><rect x="238" y="138" width="4" height="14"/><rect x="592" y="156" width="16" height="14" rx="2"/><rect x="615" y="148" width="10" height="26" rx="3"/>`)}
+  ${z("mater", `<path class="ln" d="M80,207 L80,209 L386,209 L386,222"/>`)}
+  ${z("manover", `<path class="ln" d="M712,162 L712,203 L170,203 L170,227 M590,203 L590,227"/>`)}
+  ${z("kompressor", `<circle cx="80" cy="198" r="9"/>`)}
+  ${z("tanker", `<rect x="330" y="222" width="52" height="20" rx="10"/><rect x="392" y="222" width="52" height="20" rx="10"/>`)}
+  ${z("torke", `<rect x="454" y="222" width="16" height="24" rx="4"/>`)}
+  ${z("batteri", `<rect x="480" y="222" width="50" height="24" rx="3"/>`)}
+  ${z("verktoy", `<rect x="220" y="222" width="90" height="24" rx="3"/>`)}
+  ${z("dash", `<rect x="700" y="150" width="24" height="12" rx="2"/>`)}
+  ${z("tacho", `<rect x="726" y="150" width="20" height="12" rx="2"/>`)}
+  ${z("papir", `<rect x="726" y="166" width="14" height="18" rx="2"/>`)}
+  ${z("slep", `<rect x="752" y="194" width="10" height="8" rx="1"/><circle cx="767" cy="198" r="5"/>`)}
+  ${wheel(170, "hjulDrift")}${wheel(590, "hjulFor")}
+</g>`;
+
+const combo = () => `
+  <rect class="base" x="20" y="196" width="300" height="12"/>
+  <rect class="base" x="20" y="62" width="300" height="130" rx="4"/>
+  ${z("hengerTanker", `<rect x="130" y="212" width="90" height="22" rx="11"/>`)}
+  ${z("hoyde", `<rect x="22" y="212" width="12" height="26" rx="2"/><rect x="16" y="226" width="22" height="5" rx="2"/>`)}
+  ${z("rangering", `<rect x="296" y="210" width="20" height="16" rx="3"/>`)}
+  ${z("kobling", `<path class="ln" d="M320,222 L402,222"/><circle cx="408" cy="222" r="7"/><rect x="410" y="208" width="16" height="26" rx="3"/>`)}
+  ${wheel(80, "hengerHjul", false)}${wheel(260, "hengerHjul", false)}
+  ${z("bremsearm", `<path class="ln" d="M80,240 L101,221"/><circle cx="106" cy="216" r="7"/><path class="ln" d="M260,240 L281,221"/><circle cx="286" cy="216" r="7"/>`)}
+  <g transform="translate(360 0)">${truck()}</g>
+  ${z("slanger", `<path class="hose red" d="M318,150 C352,126 384,126 414,150"/><path class="hose yellow" d="M318,164 C352,142 384,142 414,164"/>`)}`;
+
+function renderVehicle() {
+  const w = { C: 790, CE: 1120, D: 800 }[cls];
+  const body = { C: truck, CE: combo, D: bus }[cls]();
+  $("vehicle").innerHTML = `<svg class="vehicle" viewBox="0 0 ${w} 285" role="group" aria-label="Illustrasjon av ${DATA[cls].name.toLowerCase()}">
+    <line class="ground" x1="10" y1="273" x2="${w - 10}" y2="273"/>${body}</svg>`;
+  vehicleCls = cls;
+}
+
+function applyVis() {
+  if (vehicleCls !== cls) renderVehicle();
+  const v = VIS[cls][current];
+  document.querySelectorAll("#vehicle .z").forEach(g => {
+    g.classList.toggle("hl", v.z.includes(g.dataset.z));
+    g.classList.remove("focus");
+  });
+  $("parts").innerHTML = v.z.map(id => `<button class="part" type="button" data-z="${id}">${lbl(id)}</button>`).join("");
+  $("zinfo").innerHTML = `<span class="hint">De gule delene hører til kort ${current + 1}. Trykk på en del av kjøretøyet for å se hva den heter og hvilke andre kort den er med på.</span>`;
+  $("simPanel").hidden = !v.sim;
+  if (v.sim) $("simTry").textContent = SIM_TRY[v.sim];
+}
+
+function showZone(id) {
+  document.querySelectorAll("#vehicle .z").forEach(g => g.classList.toggle("focus", g.dataset.z === id));
+  const cards = VIS[cls].map((v, i) => v.z.includes(id) ? i : -1).filter(i => i >= 0);
+  $("zinfo").innerHTML = `<b>${lbl(id)}</b>${FACTS[id] ? `<p>${FACTS[id]}</p>` : ""}
+    <div class="cardlinks">${cards.length
+      ? `<span>Med på kort:</span>` + cards.map(i => `<button type="button" class="mini" data-open="${i}" aria-label="Åpne kort ${i + 1}">${i + 1}</button>`).join("")
+      : `<span class="hint">Ikke med på noen ${DATA[cls].code}-kort.</span>`}</div>`;
+}
+
+/* ---------- simulator: trykkluft ---------- */
+const sim = { ign: false, eng: false, p: [8, 8], pedal: false, d: [false, false], leak: "none", blocked: false, absT: 0, glowT: 0, beepT: 0 };
+let actx;
+const gAng = p => -120 + p * 24;
+const fmtBar = v => v.toFixed(1).replace(".", ",");
+function simMsg(t) { $("simMsg").textContent = t; }
+function beep() {
+  if (!$("sound").checked) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = "square"; o.frequency.value = 880; g.gain.value = .04;
+    o.connect(g).connect(actx.destination); o.start(); o.stop(actx.currentTime + .18);
+  } catch {}
+}
+function buildGauge() {
+  const pt = (p, r) => { const a = (gAng(p) - 90) * Math.PI / 180; return [(100 + r * Math.cos(a)).toFixed(1), (100 + r * Math.sin(a)).toFixed(1)]; };
+  const [ax, ay] = pt(0, 84), [bx, by] = pt(5.5, 84);
+  let s = `<svg viewBox="0 0 200 200" role="img" aria-label="Manometer med to nåler, 0 til 10 bar"><circle class="face" cx="100" cy="100" r="94"/>
+    <path class="danger" d="M${ax},${ay} A84,84 0 0 1 ${bx},${by}"/>`;
+  for (let i = 0; i <= 20; i++) {
+    const p = i / 2, [x1, y1] = pt(p, i % 2 ? 79 : 73), [x2, y2] = pt(p, 87);
+    s += `<line class="tick" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
+    if (i % 2 === 0) { const [tx, ty] = pt(p, 60); s += `<text x="${tx}" y="${ty}">${p}</text>`; }
+  }
+  s += `<text class="unit" x="100" y="142">bar</text>
+    <line class="n1" id="n1" x1="100" y1="112" x2="100" y2="30"/>
+    <line class="n2" id="n2" x1="100" y1="112" x2="100" y2="30"/>
+    <circle class="hub" cx="100" cy="100" r="7"/></svg>`;
+  $("gauge").innerHTML = s;
+}
+function setHold(name, on) {
+  if (name === "pedal") {
+    if (on && !sim.pedal) sim.p = sim.p.map(v => Math.max(0, v - .35));
+    sim.pedal = on;
+  } else sim.d[+name[1]] = on;
+  document.querySelectorAll(`[data-hold="${name}"]`).forEach(b => b.classList.toggle("held", on));
+}
+function drawSim(alarm) {
+  $("n1").setAttribute("transform", `rotate(${gAng(sim.p[0]).toFixed(1)} 100 100)`);
+  $("n2").setAttribute("transform", `rotate(${gAng(sim.p[1]).toFixed(1)} 100 100)`);
+  $("r1").textContent = fmtBar(sim.p[0]);
+  $("r2").textContent = fmtBar(sim.p[1]);
+  $("lAir").classList.toggle("on", alarm);
+  $("lAbs").classList.toggle("on", sim.ign && sim.absT > 0);
+  $("lGlow").classList.toggle("on", sim.ign && sim.glowT > 0);
+  $("cIgn").setAttribute("aria-pressed", sim.ign);
+  $("cEng").setAttribute("aria-pressed", sim.eng);
+}
+function simTick() {
+  if ($("simPanel").hidden) return;
+  const dt = .1, p = sim.p;
+  for (let k = 0; k < 2; k++) {
+    if (sim.eng) p[k] += .7 * dt;
+    if (sim.leak === "mater") p[k] -= .12 * dt;
+    if (sim.leak === "manover" && sim.pedal) p[k] -= .3 * dt;
+  }
+  for (let k = 0; k < 2; k++) if (sim.d[k]) {
+    const o = 1 - k;
+    if (p[k] > 6.05 && p[o] > 6.05) { p[k] -= .7 * dt; p[o] -= .7 * dt; }  // overstrømsventil: begge faller til ca. 6 bar
+    else p[k] -= 1.1 * dt;                                                 // deretter faller bare den ene kretsen
+  }
+  for (let k = 0; k < 2; k++) p[k] = Math.max(0, Math.min(8.5, p[k]));
+  const mn = Math.min(...p);
+  if (mn < 5.5) sim.blocked = true;
+  sim.absT = Math.max(0, sim.absT - dt);
+  sim.glowT = Math.max(0, sim.glowT - dt);
+  const alarm = sim.ign && mn < 5.5;
+  if (alarm) { sim.beepT -= dt; if (sim.beepT <= 0) { beep(); sim.beepT = 1.2; } } else sim.beepT = 0;
+  drawSim(alarm);
+}
+
+/* ---------- state ---------- */
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("trekk:" + k); return v ? JSON.parse(v) : d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem("trekk:" + k, JSON.stringify(v)); } catch {} }
+};
+let cls = store.get("cls", "C");
+if (!DATA[cls]) cls = "C";
+let ratings = store.get("ratings", {});       // { "C-3": "ok" | "warn" }
+let decks = {};                                 // remaining card indexes per class
+let drawn = {};                                 // drawn this round per class
+let current = 0;
+let timer = { id: null, start: 0, limit: 0 };
+
+const $ = id => document.getElementById(id);
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const key = (c, i) => c + "-" + (i + 1);
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function newDeck(c) { decks[c] = shuffle(DATA[c].cards.map((_, i) => i)); drawn[c] = new Set(); }
+
+/* ---------- render ---------- */
+function renderClasses() {
+  $("classes").innerHTML = Object.entries(DATA).map(([k, d]) => `
+    <button class="cls" type="button" data-cls="${k}" aria-pressed="${k === cls}">
+      <span class="code">${d.code}</span>
+      <span><b>${d.name}</b><small>${d.cards.length} kort</small></span>
+    </button>`).join("");
+}
+
+function esc(s) { return s.replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch])); }
+
+function renderCard() {
+  stopTimer();
+  const d = DATA[cls], card = d.cards[current], k = key(cls, current), r = ratings[k];
+  $("front").innerHTML = `
+    <div class="card-head">
+      <span class="kl">${esc(d.full)}</span>
+      <span class="nr"><small>Kort nr.</small>${current + 1}</span>
+    </div>
+    <div class="card-body">
+      ${card.intro ? `<p class="intro">${esc(card.intro)}:</p>` : ""}
+      <ol class="tasks">
+        ${card.tasks.map(([q, a], i) => `
+          <li class="task">
+            <div class="q">${esc(q)}</div>
+            <div class="task-actions">
+              <button class="btn-fasit" type="button" aria-expanded="false" aria-controls="f${i}" data-f="${i}">Vis fasit</button>
+              ${card.timer && i === 0 ? `<span class="timer" id="timer"><span>Tid</span><span class="t" id="tval">0:00</span><button type="button" id="tbtn">Start</button></span>` : ""}
+            </div>
+            <div class="fasit" id="f${i}" hidden>
+              <span class="lbl">Fasit</span>
+              ${a ? `<p>${esc(a)}</p>` : `<p class="none">Ingen fasit på kortet. Forklar med egne ord, og sjekk svaret med læreren.</p>`}
+            </div>
+          </li>`).join("")}
+      </ol>
+    </div>
+    <div class="card-foot">
+      <span class="lead">Hvordan gikk det?</span>
+      <div class="rate">
+        <button class="r-ok" type="button" data-rate="ok" aria-pressed="${r === "ok"}">Kan dette</button>
+        <button class="r-warn" type="button" data-rate="warn" aria-pressed="${r === "warn"}">Må øve mer</button>
+      </div>
+    </div>`;
+  $("allFasit").textContent = "Vis all fasit";
+  renderSide();
+  applyVis();
+}
+
+function renderSide() {
+  const d = DATA[cls], n = d.cards.length;
+  const left = decks[cls].length;
+  $("deckinfo").textContent = left === n
+    ? `Stokken har ${n} kort. Ingen trukket ennå.`
+    : `${n - left} av ${n} kort trukket. ${left} igjen i stokken.`;
+  $("deckHint").textContent = `${d.code} · ${d.name}`;
+  let ok = 0, warn = 0;
+  $("grid").innerHTML = d.cards.map((_, i) => {
+    const r = ratings[key(cls, i)];
+    if (r === "ok") ok++; if (r === "warn") warn++;
+    const label = `Kort ${i + 1}${r === "ok" ? ", kan dette" : r === "warn" ? ", må øve" : ""}`;
+    return `<button class="chip ${r || ""} ${drawn[cls].has(i) ? "drawn" : ""}" type="button" data-i="${i}" aria-label="${label}" ${i === current ? 'aria-current="true"' : ""}>${i + 1}</button>`;
+  }).join("");
+  $("bar").innerHTML = `<i class="b-ok" style="width:${ok / n * 100}%"></i><i class="b-warn" style="width:${warn / n * 100}%"></i>`;
+  $("legend").innerHTML = `<span class="l-ok">Kan: ${ok}</span><span class="l-warn">Må øve: ${warn}</span><span>Ikke vurdert: ${n - ok - warn}</span>`;
+}
+
+function toast(msg) {
+  const t = $("toast"); t.textContent = msg; t.hidden = false;
+  clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 3200);
+}
+
+/* ---------- draw ---------- */
+function show(i, animate) {
+  current = i;
+  if (!animate || reduced) { renderCard(); return; }
+  const c = $("card");
+  c.classList.add("flipping");
+  setTimeout(() => { renderCard(); c.classList.remove("flipping"); }, 330);
+}
+
+function draw() {
+  const onlyWarn = $("onlyWarn").checked;
+  if (onlyWarn) {
+    const pool = DATA[cls].cards.map((_, i) => i).filter(i => ratings[key(cls, i)] === "warn");
+    if (!pool.length) { toast("Du har ingen kort merket «Må øve mer» i denne klassen."); return; }
+    const choices = pool.length > 1 ? pool.filter(i => i !== current) : pool;
+    const i = choices[Math.floor(Math.random() * choices.length)];
+    drawn[cls].add(i); show(i, true); return;
+  }
+  if (!decks[cls].length) { newDeck(cls); toast("Alle kortene er trukket. Stokken er blandet på nytt."); }
+  const i = decks[cls].pop();
+  drawn[cls].add(i);
+  show(i, true);
+}
+
+/* ---------- timer (snøkjetting maks 10 min) ---------- */
+function fmt(s) { const m = Math.floor(s / 60), r = s % 60; return m + ":" + String(r).padStart(2, "0"); }
+function stopTimer() { clearInterval(timer.id); timer.id = null; }
+function toggleTimer() {
+  const btn = $("tbtn"), wrap = $("timer");
+  if (timer.id) { stopTimer(); btn.textContent = "Nullstill"; return; }
+  if (btn.textContent === "Nullstill") { $("tval").textContent = "0:00"; wrap.classList.remove("over"); btn.textContent = "Start"; return; }
+  timer.start = Date.now(); timer.limit = DATA[cls].cards[current].timer;
+  btn.textContent = "Stopp";
+  timer.id = setInterval(() => {
+    const s = Math.floor((Date.now() - timer.start) / 1000);
+    $("tval").textContent = fmt(s);
+    if (s >= timer.limit && !wrap.classList.contains("over")) { wrap.classList.add("over"); toast("10 minutter er gått."); }
+  }, 250);
+}
+
+/* ---------- events ---------- */
+$("classes").addEventListener("click", e => {
+  const b = e.target.closest("[data-cls]"); if (!b) return;
+  cls = b.dataset.cls; store.set("cls", cls);
+  renderClasses(); show(drawn[cls].size ? [...drawn[cls]].pop() : 0, false);
+});
+$("draw").addEventListener("click", draw);
+$("grid").addEventListener("click", e => {
+  const b = e.target.closest("[data-i]"); if (!b) return;
+  show(+b.dataset.i, true);
+});
+$("front").addEventListener("click", e => {
+  const f = e.target.closest("[data-f]");
+  if (f) {
+    const open = f.getAttribute("aria-expanded") !== "true";
+    f.setAttribute("aria-expanded", open); f.textContent = open ? "Skjul fasit" : "Vis fasit";
+    $("f" + f.dataset.f).hidden = !open; return;
+  }
+  const r = e.target.closest("[data-rate]");
+  if (r) {
+    const k = key(cls, current);
+    ratings[k] = ratings[k] === r.dataset.rate ? undefined : r.dataset.rate;
+    if (!ratings[k]) delete ratings[k];
+    store.set("ratings", ratings);
+    document.querySelectorAll("[data-rate]").forEach(b => b.setAttribute("aria-pressed", ratings[k] === b.dataset.rate));
+    renderSide(); return;
+  }
+  if (e.target.id === "tbtn") toggleTimer();
+});
+$("allFasit").addEventListener("click", () => {
+  const btns = [...document.querySelectorAll("[data-f]")];
+  const open = btns.some(b => b.getAttribute("aria-expanded") !== "true");
+  btns.forEach(b => { b.setAttribute("aria-expanded", open); b.textContent = open ? "Skjul fasit" : "Vis fasit"; $("f" + b.dataset.f).hidden = !open; });
+  $("allFasit").textContent = open ? "Skjul all fasit" : "Vis all fasit";
+});
+$("onlyWarn").addEventListener("change", e => store.set("onlyWarn", e.target.checked));
+$("reset").addEventListener("click", function () {
+  if (this.dataset.confirm !== "1") {
+    this.dataset.confirm = "1"; this.textContent = "Trykk igjen for å slette vurderingene for " + DATA[cls].code;
+    setTimeout(() => { this.dataset.confirm = ""; this.textContent = "Nullstill min fremgang"; }, 4000);
+    return;
+  }
+  Object.keys(ratings).forEach(k => { if (k.startsWith(cls + "-")) delete ratings[k]; });
+  store.set("ratings", ratings); newDeck(cls);
+  this.dataset.confirm = ""; this.textContent = "Nullstill min fremgang";
+  renderCard(); toast("Fremgangen for " + DATA[cls].code + " er nullstilt.");
+});
+document.addEventListener("keydown", e => {
+  if (e.key === " " && e.target === document.body) { e.preventDefault(); draw(); }
+});
+
+/* illustrasjon */
+$("vehicle").addEventListener("click", e => { const g = e.target.closest(".z"); if (g) showZone(g.dataset.z); });
+$("vehicle").addEventListener("keydown", e => {
+  const g = e.target.closest(".z");
+  if (g && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); showZone(g.dataset.z); }
+});
+$("parts").addEventListener("click", e => { const b = e.target.closest("[data-z]"); if (b) showZone(b.dataset.z); });
+$("zinfo").addEventListener("click", e => {
+  const b = e.target.closest("[data-open]"); if (!b) return;
+  show(+b.dataset.open, true);
+  $("card").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+});
+
+/* simulator */
+$("cIgn").addEventListener("click", () => {
+  sim.ign = !sim.ign;
+  if (sim.ign) { sim.absT = 2.5; sim.glowT = 3; simMsg("Tenningen er på. ABS-lampa og glødelampa skal tennes og så slukke."); }
+  else { sim.eng = false; simMsg("Tenningen er av."); }
+});
+$("cEng").addEventListener("click", () => {
+  if (sim.eng) { sim.eng = false; simMsg("Motoren er stoppet. Tenningen står fortsatt på."); return; }
+  if (!sim.ign) { simMsg("Slå på tenningen først."); return; }
+  if (sim.glowT > 0) { simMsg("Vent til glødelampa slukker før du starter."); return; }
+  sim.eng = true; simMsg("Motoren går. Kompressoren fyller tankene opp til ca. 8,5 bar.");
+});
+$("cPark").addEventListener("click", () => {
+  if (Math.min(...sim.p) < 6) simMsg("For lavt trykk. Parkeringsbremsen kan ikke løses før trykket er bygd opp.");
+  else if (sim.blocked) simMsg("Sperreventilen blokkerer. Bilen kan ikke flyttes før du trykker inn sperreventilen.");
+  else simMsg("Parkeringsbremsen er løst. Bilen kan flyttes.");
+});
+$("cSperre").addEventListener("click", () => {
+  if (Math.min(...sim.p) < 6) { simMsg("Bygg opp trykket i begge kretsene først."); return; }
+  const was = sim.blocked; sim.blocked = false;
+  simMsg(was ? "Sperreventilen er trykket inn. Nå kan parkeringsbremsen løses." : "Sperreventilen var ikke aktivert.");
+});
+$("cReset").addEventListener("click", () => {
+  Object.assign(sim, { ign: false, eng: false, p: [8, 8], blocked: false, absT: 0, glowT: 0, leak: "none" });
+  ["pedal", "d0", "d1"].forEach(n => setHold(n, false));
+  $("leak").value = "none"; $("leakAns").hidden = true;
+  simMsg("Simulatoren er nullstilt. Slå på tenningen for å starte.");
+});
+$("leak").addEventListener("change", e => {
+  const v = e.target.value;
+  if (v === "ukjent") {
+    sim.leak = ["none", "mater", "manover"][Math.floor(Math.random() * 3)];
+    $("leakAns").hidden = false;
+    simMsg("Det kan være en lekkasje et sted. Stopp motoren og finn ut hvor.");
+  } else {
+    sim.leak = v; $("leakAns").hidden = true;
+    simMsg(v === "none" ? "Anlegget er tett." : "Lekkasjen er satt. Stopp motoren og følg med på manometeret.");
+  }
+});
+$("leakAns").addEventListener("click", () => simMsg({
+  none: "Svar: Anlegget er tett.",
+  mater: "Svar: Lekkasje i matersystemet. Trykket faller selv om du ikke bremser.",
+  manover: "Svar: Lekkasje i manøversystemet. Trykket faller bare når bremsepedalen holdes inne."
+}[sim.leak]));
+document.querySelectorAll("[data-hold]").forEach(b => {
+  const n = b.dataset.hold;
+  b.addEventListener("pointerdown", e => { e.preventDefault(); try { b.setPointerCapture(e.pointerId); } catch {} setHold(n, true); });
+  ["pointerup", "pointercancel", "lostpointercapture"].forEach(ev => b.addEventListener(ev, () => setHold(n, false)));
+  b.addEventListener("keydown", e => { if ((e.key === " " || e.key === "Enter") && !e.repeat) { e.preventDefault(); setHold(n, true); } });
+  b.addEventListener("keyup", e => { if (e.key === " " || e.key === "Enter") setHold(n, false); });
+});
+
+/* ---------- start ---------- */
+buildGauge();
+drawSim(false);
+setInterval(simTick, 100);
+Object.keys(DATA).forEach(newDeck);
+$("onlyWarn").checked = store.get("onlyWarn", false);
+renderClasses();
+show(0, false);
+</script>
